@@ -6,11 +6,9 @@ const prisma = new PrismaClient();
 async function main() {
   const password = await bcrypt.hash("Password123!", 10);
 
-  // Create Cutting Supervisor
+  // Create demo users
   await prisma.user.upsert({
-    where: {
-      email: "cutting.supervisor@apparelflow.local",
-    },
+    where: { email: "cutting.supervisor@apparelflow.local" },
     update: {},
     create: {
       email: "cutting.supervisor@apparelflow.local",
@@ -20,11 +18,8 @@ async function main() {
     },
   });
 
-  // Create Cutting Verifier
   await prisma.user.upsert({
-    where: {
-      email: "cutting.verifier@apparelflow.local",
-    },
+    where: { email: "cutting.verifier@apparelflow.local" },
     update: {},
     create: {
       email: "cutting.verifier@apparelflow.local",
@@ -34,11 +29,8 @@ async function main() {
     },
   });
 
-  // Create Sewing Supervisor
   await prisma.user.upsert({
-    where: {
-      email: "sewing.supervisor@apparelflow.local",
-    },
+    where: { email: "sewing.supervisor@apparelflow.local" },
     update: {},
     create: {
       email: "sewing.supervisor@apparelflow.local",
@@ -48,43 +40,93 @@ async function main() {
     },
   });
 
-  // Create sample recipe
-  const recipe = await prisma.recipe.upsert({
-    where: {
-      recipeCode: "SHIRT-001",
+  // Casual Blouse
+  await prisma.recipe.upsert({
+    where: { recipeCode: "REC-BL01" },
+    update: {
+      name: "Casual Blouse",
+      category: "Blouse",
+      stdFabricYards: 1.8,
+      wastageCap: 5.0,
     },
-    update: {},
     create: {
-      recipeCode: "SHIRT-001",
-      name: "Basic Shirt",
-      category: "Shirt",
-      stdFabricYards: 1.5,
-      wastageCap: 8,
-
+      recipeCode: "REC-BL01",
+      name: "Casual Blouse",
+      category: "Blouse",
+      stdFabricYards: 1.8,
+      wastageCap: 5.0,
       components: {
         create: [
           {
-            componentName: "Front Panel",
+            componentName: "Front Body Panel",
             piecesPerGarment: 1,
           },
           {
-            componentName: "Back Panel",
+            componentName: "Back Body Panel",
             piecesPerGarment: 1,
           },
           {
-            componentName: "Sleeve",
+            componentName: "Sleeves (Left & Right)",
             piecesPerGarment: 2,
           },
           {
-            componentName: "Collar",
+            componentName: "Collar & Stand",
             piecesPerGarment: 1,
+          },
+          {
+            componentName: "Sleeve Cuffs",
+            piecesPerGarment: 2,
           },
         ],
       },
     },
   });
 
-  console.log("Sample recipe created:", recipe.recipeCode);
+  // Crop Top
+  await prisma.recipe.upsert({
+    where: { recipeCode: "REC-CT02" },
+    update: {
+      name: "Crop Top",
+      category: "Crop Top",
+      stdFabricYards: 1.1,
+      wastageCap: 8.0,
+    },
+    create: {
+      recipeCode: "REC-CT02",
+      name: "Crop Top",
+      category: "Crop Top",
+      stdFabricYards: 1.1,
+      wastageCap: 8.0,
+      components: {
+        create: [
+          {
+            componentName: "Front Chest Panel",
+            piecesPerGarment: 1,
+          },
+          {
+            componentName: "Back Support Panel",
+            piecesPerGarment: 1,
+          },
+          {
+            componentName: "Neck Binding Strip",
+            piecesPerGarment: 1,
+          },
+          {
+            componentName: "Hem Elastic Casing",
+            piecesPerGarment: 1,
+          },
+          {
+            componentName: "Side Strap Accents",
+            piecesPerGarment: 2,
+          },
+        ],
+      },
+    },
+  });
+
+  console.log("Demo users created.");
+  console.log("REC-BL01 Casual Blouse created.");
+  console.log("REC-CT02 Crop Top created.");
   console.log("Seed completed successfully.");
 }
 
